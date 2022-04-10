@@ -30,7 +30,7 @@ let activeSectionId = '';
 
 // Returns the ID of the most visible section or undefined when near the bottom of viewport
 
-function getActiveSection() {
+const getActiveSection = () => {
     let minTop = 10000;
     let idxMin = undefined;
 
@@ -41,7 +41,7 @@ function getActiveSection() {
             minTop = top;
         }
     }
-    return (idxMin === undefined ? undefined : sections[idxMin].id);
+    return idxMin === undefined ? undefined : sections[idxMin].id;
 }
 
 /**
@@ -52,21 +52,23 @@ function getActiveSection() {
 
 // Add class 'active' to section when near top of viewport
 
-function setActiveSection() {
+const setActiveSection = () => {
     const newActiveSectionId = getActiveSection();
 
     if (activeSectionId != '') {
         document.getElementById(menu_item_id_prefix + activeSectionId).classList.remove('navbar__active__item');
+        document.getElementById(activeSectionId).classList.remove('your-active-class');
     }
     if (newActiveSectionId != undefined) {
         document.getElementById(menu_item_id_prefix + newActiveSectionId).classList.add('navbar__active__item');
+        document.getElementById(newActiveSectionId).classList.add('your-active-class');
         activeSectionId = newActiveSectionId;
     }
 }
 
 // Build menu and set properties and onclic event for each item
 
-function buildMenu() {    
+const buildMenu = () => {    
     const fragment = document.createDocumentFragment();
 
     for (let section of sections) {
@@ -94,7 +96,7 @@ document.addEventListener('DOMContentLoaded', buildMenu);
 const scrollToSection = (evt) => {
     evt.preventDefault();
     const sectionId = evt.target.id.replace(menu_item_id_prefix, '');
-    document.getElementById(sectionId).scrollIntoView(true);
+    document.getElementById(sectionId).scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
 }
 
 // Set sections as active
